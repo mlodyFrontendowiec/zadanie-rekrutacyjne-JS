@@ -22,6 +22,13 @@ class StarWarsApp {
     this.addEventListeners();
   }
 
+  removeButtonLoadMore() {
+    if (this.next === null) {
+      this.button.classList.add("hide");
+      this.search.classList.add("hide");
+    }
+  }
+
   addEventListeners() {
     this.button.addEventListener("click", () => {
       this.pushNewCards();
@@ -34,7 +41,7 @@ class StarWarsApp {
     const parsedResponse = await response.json();
 
     this.people = [...parsedResponse.results];
-    this.next = parsedResponse.next === null ? "" : parsedResponse.next;
+    this.next = parsedResponse.next === null ? null : parsedResponse.next;
 
     this.createList(this.people);
   }
@@ -46,6 +53,7 @@ class StarWarsApp {
     this.people = [...this.people, ...parsedResponse.results];
     this.toogleShowElement(this.button, this.loader);
     this.createList(parsedResponse.results);
+    this.removeButtonLoadMore();
   }
   filterCards() {
     const searchQuery = this.search.value.toLowerCase();
@@ -65,11 +73,9 @@ class StarWarsApp {
     filteredCards.length === this.people.length
       ? this.info.classList.remove("hide")
       : this.info.classList.add("hide");
-    console.log(filteredCards);
 
     filteredCards.forEach(({ name }) => {
       document.getElementById(name).classList.add("hide");
-      console.log(name);
     });
   }
 
