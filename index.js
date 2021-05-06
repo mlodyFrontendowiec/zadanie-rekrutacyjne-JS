@@ -5,17 +5,16 @@ class StarWarsApp {
     this.API_ENDPOINT = `${this.API}/${this.API_TYPE}/`;
 
     this.people = [];
-    this.previous = "";
     this.next = "";
 
     this.list = document.querySelector(".main__list");
     this.button = document.querySelector(".main__button");
+    this.loader = document.querySelector(".lds-facebook");
     this.initializeFunction();
   }
 
   initializeFunction() {
     this.fetchData(this.API_ENDPOINT);
-
     this.button.addEventListener("click", () => {
       this.pushNewCards();
     });
@@ -24,19 +23,19 @@ class StarWarsApp {
   async fetchData(url) {
     const response = await fetch(url);
     const parsedResponse = await response.json();
-    console.log(parsedResponse);
+
     this.people = [...parsedResponse.results];
     this.next = parsedResponse.next === null ? "" : parsedResponse.next;
 
     this.createList(this.people);
   }
   async pushNewCards() {
+    this.toogleShowElement(this.button, this.loader);
     const response = await fetch(this.next);
     const parsedResponse = await response.json();
-    console.log(parsedResponse.results);
-
     this.next = parsedResponse.next;
     this.people = [...this.people, ...parsedResponse.results];
+    this.toogleShowElement(this.button, this.loader);
     this.createList(parsedResponse.results);
   }
 
@@ -63,9 +62,11 @@ class StarWarsApp {
     <p>Eyes Color: ${eye_color}</p>
     <p>Skin Color: ${skin_color}</p>
     <p>Gender: ${gender}</p>
-
-
   </div>`;
+  }
+
+  toogleShowElement(...elements) {
+    elements.forEach((element) => element.classList.toggle("hide"));
   }
 }
 
