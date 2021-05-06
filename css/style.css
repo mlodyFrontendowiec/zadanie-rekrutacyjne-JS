@@ -3,11 +3,38 @@
   padding: 0;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+body {
+  background-color: #1c1e22;
 }
 
 .header__title {
   text-align: center;
-  font-family: "Roboto", sans-serif;
-  margin-top: 10px;
+  color: white;
+  margin: 20px 0;
+}
+
+.main__list {
+  width: 80%;
+  margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.main__list-item {
+  list-style: none;
+  padding: 12px 10px;
+  border: 2px solid yellow;
+  margin: 10px 0;
+  color: #bbb;
+  width: 30%;
 }
 /*# sourceMappingURL=style.css.map */

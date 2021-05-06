@@ -9,8 +9,16 @@ class StarWarsApp {
     this.next = "";
 
     this.list = document.querySelector(".main__list");
+    this.button = document.querySelector(".main__button");
+    this.initializeFunction();
+  }
 
+  initializeFunction() {
     this.fetchData(this.API_ENDPOINT);
+
+    this.button.addEventListener("click", () => {
+      this.pushNewCards();
+    });
   }
 
   async fetchData(url) {
@@ -18,11 +26,18 @@ class StarWarsApp {
     const parsedResponse = await response.json();
     console.log(parsedResponse);
     this.people = [...parsedResponse.results];
-    this.previous =
-      parsedResponse.previous === null ? "" : parsedResponse.previous;
     this.next = parsedResponse.next === null ? "" : parsedResponse.next;
 
     this.createList(this.people);
+  }
+  async pushNewCards() {
+    const response = await fetch(this.next);
+    const parsedResponse = await response.json();
+    console.log(parsedResponse.results);
+
+    this.next = parsedResponse.next;
+    this.people = [...this.people, ...parsedResponse.results];
+    this.createList(parsedResponse.results);
   }
 
   createList(items) {
@@ -40,7 +55,7 @@ class StarWarsApp {
     birth_year,
     gender,
   }) {
-    return ` <li class="main__list-item">
+    return ` <div class="main__list-item">
     <h2>${name}</h2>
     <p>Height: ${height} cm</p>
     <p>Mass: ${mass} kg</p>
@@ -50,7 +65,7 @@ class StarWarsApp {
     <p>Gender: ${gender}</p>
 
 
-  </li>`;
+  </div>`;
   }
 }
 
