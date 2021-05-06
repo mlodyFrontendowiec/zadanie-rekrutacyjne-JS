@@ -7,17 +7,26 @@ class StarWarsApp {
     this.people = [];
     this.next = "";
 
-    this.list = document.querySelector(".main__list");
-    this.button = document.querySelector(".main__button");
-    this.loader = document.querySelector(".lds-facebook");
+    this.fetchData(this.API_ENDPOINT);
+
     this.initializeFunction();
   }
 
   initializeFunction() {
-    this.fetchData(this.API_ENDPOINT);
+    this.list = document.querySelector(".main__list");
+    this.button = document.querySelector(".main__button");
+    this.loader = document.querySelector(".lds-facebook");
+    this.search = document.querySelector(".header__search");
+    this.info = document.querySelector(".main__info");
+
+    this.addEventListeners();
+  }
+
+  addEventListeners() {
     this.button.addEventListener("click", () => {
       this.pushNewCards();
     });
+    this.search.addEventListener("keyup", () => this.filterCards());
   }
 
   async fetchData(url) {
@@ -38,6 +47,31 @@ class StarWarsApp {
     this.toogleShowElement(this.button, this.loader);
     this.createList(parsedResponse.results);
   }
+  filterCards() {
+    const searchQuery = this.search.value.toLowerCase();
+
+    searchQuery.length
+      ? this.button.classList.add("hide")
+      : this.button.classList.remove("hide");
+
+    document
+      .querySelectorAll(".main__list-item")
+      .forEach((item) => item.classList.remove("hide"));
+
+    const filteredCards = this.people.filter(
+      ({ name }) => !name.toLowerCase().includes(searchQuery)
+    );
+
+    filteredCards.length === this.people.length
+      ? this.info.classList.remove("hide")
+      : this.info.classList.add("hide");
+    console.log(filteredCards);
+
+    filteredCards.forEach(({ name }) => {
+      document.getElementById(name).classList.add("hide");
+      console.log(name);
+    });
+  }
 
   createList(items) {
     this.list.insertAdjacentHTML("beforeend", [
@@ -54,7 +88,7 @@ class StarWarsApp {
     birth_year,
     gender,
   }) {
-    return ` <div class="main__list-item">
+    return ` <div class="main__list-item" id="${name}" >
     <h2>${name}</h2>
     <p>Height: ${height} cm</p>
     <p>Mass: ${mass} kg</p>
