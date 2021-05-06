@@ -21,19 +21,9 @@ class StarWarsApp {
 
     this.addEventListeners();
   }
-
-  removeButtonLoadMore() {
-    if (this.next === null) {
-      this.button.classList.add("hide");
-      this.search.classList.add("hide");
-    }
-  }
-
   addEventListeners() {
-    this.button.addEventListener("click", () => {
-      this.pushNewCards();
-    });
-    this.search.addEventListener("keyup", () => this.filterCards());
+    this.button.addEventListener("click", () => this.pushNewCards());
+    this.search.addEventListener("keyup", () => this.filterItems());
   }
 
   async fetchData(url) {
@@ -55,7 +45,15 @@ class StarWarsApp {
     this.createList(parsedResponse.results);
     this.removeButtonLoadMore();
   }
-  filterCards() {
+
+  removeButtonLoadMore() {
+    if (this.next === null) {
+      this.button.classList.add("hide");
+      this.search.classList.add("hide");
+    }
+  }
+
+  filterItems() {
     const searchQuery = this.search.value.toLowerCase();
 
     searchQuery.length
@@ -66,15 +64,15 @@ class StarWarsApp {
       .querySelectorAll(".main__list-item")
       .forEach((item) => item.classList.remove("hide"));
 
-    const filteredCards = this.people.filter(
+    const filteredItems = this.people.filter(
       ({ name }) => !name.toLowerCase().includes(searchQuery)
     );
 
-    filteredCards.length === this.people.length
+    filteredItems.length === this.people.length
       ? this.info.classList.remove("hide")
       : this.info.classList.add("hide");
 
-    filteredCards.forEach(({ name }) => {
+    filteredItems.forEach(({ name }) => {
       document.getElementById(name).classList.add("hide");
     });
   }
